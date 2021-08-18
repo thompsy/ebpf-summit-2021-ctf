@@ -41,7 +41,27 @@ int _egress(struct __sk_buff *skb) {
 
     bpf_printk("Sending request. Now do something with it...\n");
 
-    /* TODO: the solution goes here*/
+    /* NOTE: This is the solution to problem 1 */
+    // We want to take packets going to 100.202.1.3 and re-write them to actually go to 100.202.1.1 as this should bypass the iptables filter
+    if (ip->daddr == 0x0301ca64) { // sending to 100.202.1.3
+        // First I need to set the new destination IP address
+        __u32 new_dest = 0x0101ca64;
+
+        // Compute the new checksum
+        sum = bpf_csum_diff(&ip->daddr, 4, &new_dest, 4, 0);
+        bpf_printk("sum = %d\n", sum);
+
+        // Write the new destination address into the socket buffer
+        ret = bpf_skb_store_bytes(skb, l3_off + offsetof(struct iphdr, daddr), &new_dest, 4, 0);
+        bpf_printk("ret = %d\n", ret);
+
+        if (ret < 0)
+            return TC_ACT_SHOT;
+
+        // Write the new checksum into the socket buffer
+        if(bpf_l3_csum_replace(skb, l3_off + offsetof(struct iphdr, check), 0, sum, 0) < 0)
+            return TC_ACT_SHOT;
+    }
 
     return TC_ACT_OK;
 }
