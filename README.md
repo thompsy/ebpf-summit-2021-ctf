@@ -13,8 +13,8 @@ Imperial blockade using eBPF instead of touching the (off-limits) iptables rules
 | # | Topic | Status |
 |---|-------|--------|
 | [1 — Bypass the blockade](challenge-1/) | TC egress/ingress `bpf.c`: rewrite UDP destination/source addresses and recompute IP checksums to tunnel past an iptables jamming rule | ✅ Solved, with working code |
-| [2 — Grim Hornet login shell](challenge-2/) | Write-up and notes from working the challenge | 📝 Notes only |
-| [3 — Breach the Death Star firewall](challenge-3/) | Cilium/Kubernetes-based eBPF firewall challenge | 🚧 Attempted |
+| [2 — Grim Hornet login shell](challenge-2/) | Solved — captured in a write-up rather than code | ✅ Solved (notes only) |
+| [3 — Breach the Death Star firewall](challenge-3/) | Cilium/Kubernetes-based eBPF firewall challenge | ⬜ Not attempted |
 
 ## Challenge 1 highlights
 
